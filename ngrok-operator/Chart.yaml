@@ -1,0 +1,21 @@
+apiVersion: v2
+appVersion: 0.19.1
+dependencies:
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: The official ngrok Kubernetes Operator.
+home: https://ngrok.com
+icon: https://charts.ngrok.com/assets/ngrok-favicon.svg
+keywords:
+- ngrok
+- networking
+- ingress
+- edge
+- api gateway
+name: ngrok-operator
+sources:
+- https://github.com/ngrok/ngrok-operator
+version: 0.21.1

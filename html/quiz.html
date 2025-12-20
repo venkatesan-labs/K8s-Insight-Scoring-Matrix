@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🚀 DevOps Ninja 2025 Quiz Challenge!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f9fd; margin: 0; }
+        .container { max-width: 600px; background: #fff; margin: 40px auto; border-radius: 14px; box-shadow: 0 7px 22px #ccd9eb55; padding: 40px 30px 30px 30px; }
+        h1 { text-align: center; font-size: 2em; background: linear-gradient(90deg, #00aaff, #0055ff); color: #fff; padding: 15px; border-radius: 10px; margin-bottom: 30px; }
+        #questionBox { margin-bottom: 22px; min-height: 70px; font-size: 1.15em; }
+        .option { display: block; margin: 10px 0; padding: 10px 16px; background: #dfeffe; border-radius: 7px; border: none; cursor: pointer; font-size: 1.08em; transition: background .2s;}
+        .option[disabled] { opacity: .7; cursor: not-allowed;}
+        .option.selected-correct { background: #c7fbe8 !important; }
+        .option.selected-wrong { background: #ffd3dd !important; }
+        .option.reveal-correct { background: #c7fbe8 !important; }
+        .option:hover:not([disabled]) { background: #b7c8f4; }
+        #feedback { min-height: 28px; margin: 14px 0; font-size: 1.1em; }
+        #scoreBox { font-weight: bold; margin-top: 20px;}
+        #nextBtn, #restartBtn { margin-top: 16px; padding: 12px 22px; font-size: 1em; background: #00bb77; border: none; color: #fff; border-radius: 7px; cursor: pointer;}
+        #nextBtn:disabled { background: #c1e0cd; color: #666; cursor: not-allowed; }
+        #restartBtn {background: #0055ff;}
+        @media (max-width: 650px) { .container {padding: 18px;}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🚀 DevOps Ninja 2025 Quiz Challenge!</h1>
+    <div id="mainQuiz">
+        <div id="scoreBox"></div>
+        <div id="questionBox"></div>
+        <div id="optionsBox"></div>
+        <div id="feedback"></div>
+        <button id="nextBtn" disabled>Next</button>
+    </div>
+    <div id="resultBox" style="display:none;">
+        <h2>Your Score: <span id="finalScore"></span>/<span id="totalQuestions"></span></h2>
+        <p id="skillLevel"></p>
+        <button id="restartBtn">Restart Quiz</button>
+    </div>
+</div>
+<script>
+const questionBank = [
+// Kubernetes (15)
+{q:"What is the smallest deployable unit in Kubernetes?",opts:["Pod","Cluster","Node","Service"],ans:0},
+{q:"Which component of Kubernetes maintains network rules on nodes?",opts:["Controller Manager","kube-proxy","kube-apiserver","Dashboard"],ans:1},
+{q:"What file format are Kubernetes manifests usually written in?",opts:["JSON","YAML","TOML","XML"],ans:1},
+{q:"Which controller ensures the specified number of pods are running?",opts:["Deployment","ReplicaSet","Service","Ingress"],ans:1},
+{q:"What is the default namespace in Kubernetes?",opts:["default","main","root","kube-system"],ans:0},
+{q:"How do you see all pods in all namespaces?",opts:["kubectl get pods --all-namespaces","kubectl describe pods all","kubectl get all pods","kubectl pods --all"],ans:0},
+{q:"What does 'kubelet' do?",opts:["API server","Node agent","Load balancer","Service discovery"],ans:1},
+{q:"Which type exposes a pod on a static port on each node?",opts:["ClusterIP","NodePort","LoadBalancer","Ingress"],ans:1},
+{q:"What is Helm used for in Kubernetes?",opts:["Monitoring","Package management","Persistent storage","Auto-scaling"],ans:1},
+{q:"Which object provides a stable IP and DNS for a set of pods?",opts:["ConfigMap","Service","Pod","Deployment"],ans:1},
+{q:"Which controller manages updates to pods declaratively?",opts:["DaemonSet","StatefulSet","Deployment","Job"],ans:2},
+{q:"Which resource stores key-value pairs for configuration?",opts:["ConfigMap","Secret","Pod","PVC"],ans:0},
+{q:"What is the kube-apiserver responsible for?",opts:["Networking","REST API interface","Scheduling","Storage"],ans:1},
+{q:"Which Kubernetes resource ensures that a pod runs on every node?",opts:["ReplicaSet","Deployment","DaemonSet","StatefulSet"],ans:2},
+{q:"How do you switch contexts in `kubectl`?",opts:["kubectl set-context","kubectl change context","kubectl config use-context","kubectl switch"],ans:2},
+// Jenkins (10)
+{q:"What file defines a Jenkins pipeline?",opts:["pipeline.yaml","Jenkinsfile","Buildfile","jenkins.xml"],ans:1},
+{q:"Jenkins is primarily used for:",opts:["Logging","Continuous Integration/Deployment","Networking","Monitoring"],ans:1},
+{q:"Which scripting language is used in Jenkinsfile?",opts:["Python","Groovy","Ruby","Bash"],ans:1},
+{q:"Which plugin stores job and build configurations in Git?",opts:["NodeLabel","GitHub","Job DSL","Pipeline SCM"],ans:3},
+{q:"A Jenkins job can be triggered by:",opts:["Scheduled timer","Git push","Manual click","All of these"],ans:3},
+{q:"What step checks out code in Jenkins pipeline?",opts:["git checkout","stage('Checkout')","checkout scm","scm pull"],ans:2},
+{q:"What is Jenkins Blue Ocean?",opts:["New UI","Security plugin","Type of build agent","Analytics tool"],ans:0},
+{q:"How do you add a new plugin to Jenkins?",opts:["Build triggers","Plugin Manager","Job config","Workspace"],ans:1},
+{q:"Jenkins nodes are also known as:",opts:["Managers","Agents","Triggers","Pipelines"],ans:1},
+{q:"What is a Jenkins agent for?",opts:["Stores logs","Executes pipeline steps","Uploads artifacts","Manages plugins"],ans:1},
+// GitHub & Git (13)
+{q:"What command initializes a new Git repository?",opts:["git origin","git start","git init","git new"],ans:2},
+{q:"What does a .gitignore file do?",opts:["Lists dependencies","Lists files to ignore in repo","Describes contributors","Runs tests"],ans:1},
+{q:"Which command stages changes for commit?",opts:["git push","git status","git commit","git add"],ans:3},
+{q:"Which command clones a remote repo?",opts:["git pull","git download","git fork","git clone"],ans:3},
+{q:"On GitHub, what is a 'pull request'?",opts:["Fetch remote changes","Request review to merge changes","Delete a branch","Archive a repo"],ans:1},
+{q:"How do you create a new branch?",opts:["git branch new-branch","git create branch","git fork branch","git push branch"],ans:0},
+{q:"Where are GitHub Actions workflows stored?",opts:["/workflows/main.yml",".github/workflows/","/git/workflows/","/actions/"],ans:1},
+{q:"Which command shows the commit history?",opts:["git show","git history","git log","git commits"],ans:2},
+{q:"What is needed to authenticate to GitHub from CI/CD?",opts:["Root password","Access token/SSH key","Admin invite","Nothing"],ans:1},
+{q:"How do you resolve a merge conflict?",opts:["git revert","Edit files, then add & commit","git fetch","re-clone branch"],ans:1},
+{q:"Which code review feature does GitHub support?",opts:["Merge requests","Pull requests","Changesets","Snapshots"],ans:1},
+{q:"How do you delete a Git branch?",opts:["git delete branch","git branch -d branch","git delbranch","git remove branch"],ans:1},
+{q:"Which command fetches remote changes but does not merge?",opts:["git fetch","git pull","git push","git update"],ans:0},
+// DevOps Concepts (12)
+{q:"What does CI/CD stand for?",opts:["Code Integration/Code Development","Continuous Integration/Continuous Delivery","Central Integration/Central Deployment","Coding Infrastructure/Code Deployment"],ans:1},
+{q:"What is Infrastructure as Code (IaC)?",opts:["Storing code in infrastructure","Provisioning infra using code","Managing code in cloud","Infra from internet"],ans:1},
+{q:"Which is an IaC tool?",opts:["Terraform","MySQL","Ubuntu","Slack"],ans:0},
+{q:"Which DevOps tool is a container orchestrator?",opts:["Docker","Kubernetes","Vault","Terraform"],ans:1},
+{q:"Which tool is used for containerization?",opts:["Git","Docker","Ansible","Jira"],ans:1},
+{q:"What is a DevOps pipeline?",opts:["A network tunnel","Sequence of CI/CD steps","Firewall rule","Logging script"],ans:1},
+{q:"Which language is NOT commonly used for DevOps scripts?",opts:["Bash","Python","Java","PowerShell"],ans:2},
+{q:"Which method enables rolling updates in K8s?",opts:["kubectl edit","Deployment update","Pod replace","Pod update"],ans:1},
+{q:"Which of the following is NOT DevOps tool?",opts:["Jenkins","Docker","Photoshop","Kubernetes"],ans:2},
+{q:"Which command lists Docker images?",opts:["docker ls","docker images","docker list","docker ps"],ans:1},
+{q:"Which command starts a Docker container?",opts:["docker start","docker up","docker run","docker exec"],ans:2},
+{q:"DevOps encourages collaboration between:",opts:["Developers & IT Ops","Marketing & HR","Sales & Finance","Support & QA"],ans:0},
+];
+
+const MAX_QUESTIONS = 15;
+
+function getRandomQuestions(num) {
+    let arr = questionBank.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+        let j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr.slice(0, Math.min(num, arr.length));
+}
+let questions = [], currIdx = 0, score = 0, answered = false;
+
+function startQuiz() {
+    questions = getRandomQuestions(MAX_QUESTIONS);
+    currIdx = 0; score = 0; answered = false;
+    document.getElementById('resultBox').style.display = 'none';
+    document.getElementById('mainQuiz').style.display = '';
+    showQuestion();
+}
+
+function showQuestion() {
+    answered = false;
+    document.getElementById('scoreBox').textContent = `Question ${currIdx+1} of ${questions.length} | Score: ${score}`;
+    const q = questions[currIdx];
+    document.getElementById('questionBox').textContent = q.q || 'Question loading...';
+    document.getElementById('feedback').textContent = '';
+    const optsBox = document.getElementById('optionsBox');
+    optsBox.innerHTML = '';
+    (q.opts || []).forEach((option, i) => {
+        const btn = document.createElement('button');
+        btn.textContent = option || `Option ${i+1}`;
+        btn.className = 'option';
+        btn.onclick = function() {
+            if (answered) return;
+            checkAnswer(i, btn);
+            answered = true;
+        };
+        optsBox.appendChild(btn);
+    });
+    document.getElementById('nextBtn').disabled = true;
+}
+
+function checkAnswer(index, btn) {
+    const q = questions[currIdx];
+    const optionButtons = Array.from(document.getElementsByClassName('option'));
+    optionButtons.forEach(b => b.disabled = true);
+
+    if(index === q.ans) {
+        document.getElementById('feedback').innerHTML = '<span style="color: #00bb77; font-weight:bold;">Correct!</span>';
+        score++;
+        btn.classList.add('selected-correct');
+    } else {
+        document.getElementById('feedback').innerHTML = `<span style="color: #e72929; font-weight:bold;">Wrong! Correct: ${q.opts[q.ans]}</span>`;
+        btn.classList.add('selected-wrong');
+        optionButtons[q.ans].classList.add('reveal-correct');
+    }
+    document.getElementById('nextBtn').disabled = false;
+}
+
+document.getElementById('nextBtn').onclick = function() {
+    if(currIdx < questions.length - 1) {
+        currIdx++;
+        showQuestion();
+    } else {
+        showResult();
+    }
+};
+
+// REPLACE your existing showResult function with this:
+function showResult() {
+    // We use the global 'score' and 'questions' variables defined in your script
+    const finalScore = score;
+    const totalQuestions = questions.length;
+    
+    // Construct the URL
+    const destination = "result.html?score=" + finalScore + "&total=" + totalQuestions;
+    
+    // Redirect
+    window.location.href = destination;
+}
+
+// ENSURE your nextBtn logic calls this function:
+document.getElementById('nextBtn').onclick = function() {
+    if(currIdx < questions.length - 1) {
+        currIdx++;
+        showQuestion();
+    } else {
+        showResult(); // This triggers the redirect
+    }
+};
+document.getElementById('restartBtn').onclick = function() { startQuiz(); };
+
+startQuiz();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,33 @@
+<div style="direction: ltr; border-width: 100%;">
+<div style="direction: ltr; margin-top: 0in; margin-left: 0in; width: 7.7027in;">
+<div style="direction: ltr; margin-top: 0in; margin-left: 0in; width: 7.7027in;">
+<h1 style="text-align: center;">Namespace</h1>
+<p>&nbsp;</p>
+<p><strong>Namespace</strong></p>
+<ul>
+<li>Logical separation of cluster resources within the same physical cluster.</li>
+<li>Resource allocation, management, and quota application at the namespace level.</li>
+<li>Access control and security policies to be applied per namespace.</li>
+<li>Simplified monitoring and organization of related resources by grouping them under a namespace name.</li>
+</ul>
+<p>&nbsp;</p>
+<p># Imperative command to create namespcae</p>
+<p># kubectl create namespace my-namespace</p>
+<p>apiVersion: v1</p>
+<p>kind: Namespace</p>
+<p>metadata:</p>
+<p>&nbsp; name: my-app</p>
+<p># Labels in namespace used to filter the namespace</p>
+<p># kubectl get pods -n (kubectl get namespace -l environment=production) &gt;&gt; get pods in particular name space)</p>
+<p># kubectl get namespaece -l environment=devops&nbsp;</p>
+<p>&nbsp; labels:</p>
+<p>&nbsp;&nbsp;&nbsp; app: my-app</p>
+<p># annotation will provide an detailed description and information of this namespace yaml</p>
+<p>&nbsp; annotations:</p>
+<p>&nbsp;&nbsp;&nbsp; description: This is default namespace for entire template</p>
+<p># when object (pod or deployment) under the namespace is removed, it will make sure all the Object in namespace are removed and finally remove this namespace.</p>
+<p>&nbsp; finalizers:</p>
+<p>&nbsp;&nbsp;&nbsp; - kubernetes</p>
+</div>
+</div>
+</div>

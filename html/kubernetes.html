@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Kubernetes Guide</title>
+    <style>
+        /* CSS Styling for a professional look */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8; /* Light gray background */
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            width: 80%;
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 30px;
+        }
+        header h1 {
+            color: #0056b3; /* A professional blue color */
+            margin-bottom: 5px;
+        }
+        .intro-text {
+            margin-bottom: 30px;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background-color: #e9f7ff;
+            border-radius: 4px;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .guide-button {
+            display: block;
+            padding: 15px 20px;
+            text-align: left;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff; /* Primary button color */
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .guide-button:hover {
+            background-color: #0056b3; /* Darker on hover */
+            transform: translateY(-2px);
+        }
+        .guide-button span {
+            display: block;
+            font-size: 0.85em;
+            font-weight: normal;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Kubernetes Knowledge Sharing Hub</h1>
+            <p>Essential Guide for Infrastructure Engineers and Developers</p>
+        </header>
+
+        <div class="intro-text">
+            <p><strong>Kubernetes</strong> is an open-source container orchestration system that automates the deployment, scaling, and management of containerized applications. It provides a robust, self-healing platform essential for running modern, cloud-native microservices. This guide breaks down the core concepts required to deploy and maintain applications within a production Kubernetes environment.</p>
+        </div>
+
+        <h2>Module Navigation</h2>
+        <div class="button-grid">
+            
+            <a href="introduction.html" class="guide-button">
+                1. Introduction 
+                <span>Understanding the K8s Architecture and Core Concepts.</span>
+            </a>
+
+            <a href="namespace.html" class="guide-button">
+                2. Namespace 
+                <span>Logical grouping and resource isolation.</span>
+            </a>
+
+            <a href="deployment.html" class="guide-button">
+                3. Deployment 
+                <span>Managing declarative updates to Pods and ReplicaSets.</span>
+            </a>
+
+            <a href="compute.html" class="guide-button">
+                4. Compute (Pods & ReplicaSets)
+                <span>Defining the running units and ensuring high availability.</span>
+            </a>
+
+            <a href="storage.html" class="guide-button">
+                5. Storage (PV, PVC, CSI)
+                <span>Persistent data management for stateful applications.</span>
+            </a>
+
+            <a href="service.html" class="guide-button">
+                6. Service 
+                <span>Abstracting network access to a set of Pods.</span>
+            </a>
+
+            <a href="networking.html" class="guide-button">
+                7. Networking (CNI & Ingress)
+                <span>Inter-Pod communication and external access control.</span>
+            </a>
+
+            <a href="security.html" class="guide-button">
+                8. Security (RBAC & Pod Security)
+                <span>Defining user permissions and Pod runtime policy.</span>
+            </a>
+
+            <a href="config-secret.html" class="guide-button">
+                9. ConfigMaps & Secrets 
+                <span>Separating configuration and sensitive data from code.</span>
+            </a>
+
+            <a href="crd.html" class="guide-button">
+                10. Custom Resource Definition (CRD)
+                <span>Extending the K8s API with custom objects.</span>
+            </a>
+
+            <a href="admission.html" class="guide-button">
+                11. Admission Webhooks 
+                <span>Implementing policy and validation checks on requests.</span>
+            </a>
+
+        </div>
+    </div>
+</body>
+</html>

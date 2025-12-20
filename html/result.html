@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results | DevOps Ninja 2025</title>
+    <style>
+        :root { --primary: #007aff; --bg: #f4f7fa; --text: #1a202c; --border: #e2e8f0; }
+        body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .result-card { background: white; width: 100%; max-width: 550px; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; border: 1px solid var(--border); }
+        
+        .score-box { background: #eff6ff; border: 2px solid var(--primary); border-radius: 16px; padding: 30px 20px; margin-bottom: 30px; }
+        .score-num { font-size: 3.5rem; font-weight: 800; color: var(--primary); margin: 0; }
+        .score-label { font-size: 0.85rem; font-weight: 700; color: #1e40af; text-transform: uppercase; letter-spacing: 1.5px; margin-top: 5px; }
+
+        h2 { font-size: 1.8rem; color: var(--text); margin-bottom: 8px; }
+        .subtitle { color: #64748b; font-size: 1rem; margin-bottom: 32px; line-height: 1.6; }
+
+        .form-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; color: #475569; margin-bottom: 8px; }
+        input { width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 10px; font-size: 1rem; box-sizing: border-box; transition: 0.2s; }
+        input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1); }
+
+        .btn-action { width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; text-decoration: none; display: block; }
+        .btn-action:hover { background: #005ecb; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0, 122, 255, 0.25); }
+
+        .leaderboard-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin: 20px 0; }
+        .leaderboard-table th { color: #94a3b8; font-size: 0.75rem; text-transform: uppercase; padding: 12px; text-align: left; }
+        .leaderboard-table td { padding: 16px 12px; background: #f8fafc; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+        .leaderboard-table td:first-child { border-left: 1px solid var(--border); border-radius: 10px 0 0 10px; font-weight: 800; color: var(--primary); }
+        .leaderboard-table td:last-child { border-right: 1px solid var(--border); border-radius: 0 10px 10px 0; font-weight: 700; text-align: right; }
+
+        .retake-btn-outline { display: inline-block; margin-top: 20px; color: #64748b; text-decoration: none; font-size: 0.9rem; font-weight: 600; padding: 10px 20px; border: 1.5px solid var(--border); border-radius: 8px; transition: 0.2s; }
+        .retake-btn-outline:hover { background: #f1f5f9; color: var(--text); border-color: #cbd5e1; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div class="result-card">
+    <div id="registrationArea">
+        <div class="score-box">
+            <p class="score-num" id="finalScore">0/0</p>
+            <p class="score-label">Deployment Success Rate</p>
+        </div>
+
+        <h2>Verify Your Expertise</h2>
+        <p class="subtitle">Complete your profile to benchmark your results against the global DevOps community.</p>
+
+        <div class="form-group">
+            <label>Professional Name</label>
+            <input type="text" id="name" placeholder="e.g. Jane Doe">
+        </div>
+
+        <div class="form-group">
+            <label>Work Email (for verification)</label>
+            <input type="email" id="email" placeholder="jane.doe@company.com">
+        </div>
+
+        <button class="btn-action" id="submitBtn" onclick="submitData()">Update Global Standings 🏆</button>
+        <a href="quiz.html" class="retake-btn-outline">Discard & Retake Quiz</a>
+    </div>
+
+    <div id="leaderboardArea" class="hidden">
+        <h2>Top 10 High-Performance Engineers</h2>
+        <p class="subtitle">Real-time ranking of industry leaders based on accuracy and deployment speed.</p>
+        
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th width="15%">Rank</th>
+                    <th width="60%">Engineer</th>
+                    <th width="25%" style="text-align: right;">Score</th>
+                </tr>
+            </thead>
+            <tbody id="leaderboardBody"></tbody>
+        </table>
+
+        <div style="margin-top: 30px; border-top: 1px solid #f1f5f9; padding-top: 20px;">
+            <p style="font-size: 0.85rem; color: #94a3b8; margin-bottom: 15px;">Want to improve your ranking?</p>
+            <a href="quiz.html" class="btn-action">Retake Quiz 🚀</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const BACKEND_URL = ''; 
+    const params = new URLSearchParams(window.location.search);
+    const score = params.get('score') || 0;
+    const total = params.get('total') || 15;
+
+    document.getElementById('finalScore').innerText = `${score}/${total}`;
+
+    // REDIRECT ON BACK BUTTON: Redirect to quiz.html if user tries to go back
+    window.addEventListener('pageshow', (event) => {
+        if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+            window.location.href = 'quiz.html';
+        }
+    });
+
+    // Push a state so we can detect the back button
+    history.pushState(null, null, window.location.href);
+    window.onpopstate = function() {
+        window.location.href = 'quiz.html';
+    };
+
+    async function submitData() {
+        const nameInput = document.getElementById('name').value.trim();
+        const emailInput = document.getElementById('email').value.trim();
+        const btn = document.getElementById('submitBtn');
+
+        if(!nameInput || !emailInput) {
+            alert("Professional credentials required.");
+            return;
+        }
+
+        btn.disabled = true;
+        btn.innerText = "Synchronizing Data...";
+
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/score`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+                body: JSON.stringify({ name: nameInput, email: emailInput, score: `${score}/${total}`, company: "DevOps Academy" })
+            });
+
+            if (response.ok) {
+                document.getElementById('registrationArea').classList.add('hidden');
+                document.getElementById('leaderboardArea').classList.remove('hidden');
+                loadLeaderboard(); 
+            }
+        } catch (error) {
+            alert("Sync failed. Check connection.");
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    async function loadLeaderboard() {
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/leaderboard`, {
+                headers: { 'ngrok-skip-browser-warning': 'true' }
+            });
+            const data = await response.json();
+            const tbody = document.getElementById('leaderboardBody');
+            tbody.innerHTML = ''; 
+
+            data.slice(0, 10).forEach((user, index) => {
+                const row = `<tr>
+                    <td>#${index + 1}</td>
+                    <td style="font-weight: 600; color: #334155;">${user.name}</td>
+                    <td>${user.score}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            });
+        } catch (e) {
+            console.error(e);
+        }
+    }
+</script>
+</body>
+</html>
