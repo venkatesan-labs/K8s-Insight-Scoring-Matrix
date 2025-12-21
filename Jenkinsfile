@@ -67,12 +67,12 @@ pipeline{
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG_PATH')]) {
                 script {
                     def FRONT_TAG = "${env.BUILD_NUMBER}"
-                    if (params.FRONTEND_IMAGE_NAME.trim() !=  'latest') {
-                        def FRONT_TAG = params.FRONTEND_IMAGE_TAG.trim()
+                    if (params.FRONTEND_IMAGE_TAG.trim() !=  'latest') {
+                        FRONT_TAG = params.FRONTEND_IMAGE_TAG.trim()
                     }
                     def BACK_TAG = "${env.BUILD_NUMBER}"
-                    if (params.BACKEND_IMAGE_NAME.trim() !=  'latest') {
-                        def BACK_TAG = params.BACKEND_IMAGE_TAG.trim()
+                    if (params.BACKEND_IMAGE_TAG.trim() !=  'latest') {
+                        BACK_TAG = params.BACKEND_IMAGE_TAG.trim()
                     }                    
                     def KUBECONFIG = "${KUBECONFIG_PATH}"
                     sh """
