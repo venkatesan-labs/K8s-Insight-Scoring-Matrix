@@ -38,8 +38,7 @@ pipeline{
                         docker build -f ./frontend/Dockerfile -t ${frontendImage} .
                         echo ${REGISTRY_CREDENTIALS_PSW} | docker login ghcr.io -u ${REGISTRY_CREDENTIALS_USR} --password-stdin
                         docker push ${frontendImage}
-                    """
-                    
+                    """                    
                 }
                 }  
             }
@@ -61,6 +60,20 @@ pipeline{
                     """
                 }
             }
+            }
+        }
+        stage ('Deploy to Kubernetes'){
+            steps {
+                script {
+                    sh """
+                        # Add your kubectl deployment commands here
+                        echo "Deploying to ${params.ENV} environment"
+                        helm upgrade --install k8s-insight-${params.ENV} ./k8s-insight-chart \\
+                            --set frontend.image=${GIT_REGISTRY}/${FRONTEND_IMAGE_NAME}:${env.BUILD_NUMBER} \\
+                            --set backend.image=${GIT_REGISTRY}/${BACKEND_IMAGE_NAME}:${env.BUILD_NUMBER} \\
+                            --namespace k8s-insight-${params.ENV} --create-namespace
+                    """
+                }
             }
         }
     }
