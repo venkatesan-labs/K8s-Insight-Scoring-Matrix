@@ -66,7 +66,7 @@ pipeline{
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG_PATH')]) {
                 script {
-                    def kubeconfig = ${KUBECONFIG_PATH}
+                    def kubeconfig = "${KUBECONFIG_PATH}"
                     sh """
                         # Add your kubectl deployment commands here
                         echo "Deploying to ${params.ENV} environment"
