@@ -27,7 +27,7 @@ pipeline{
         }
         stage ('Build and Push Frontend Image') {
             when {
-                expression { (params.FRONTEND_IMAGE_TAG.trim()) == "" }
+                expression { (params.FRONTEND_IMAGE_TAG.trim()) == 'latest' }
                 }             
             steps {             
                 script {
@@ -43,7 +43,7 @@ pipeline{
         }
         stage ('Build and Push Backend Image') {
             when {
-                expression { (params.BACKEND_IMAGE_TAG.trim()) == '' }
+                expression { (params.BACKEND_IMAGE_TAG.trim()) == 'latest' }
                 }
             steps {
                 script {
