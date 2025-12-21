@@ -1,9 +1,9 @@
-# 1. METADATA: Provides context for other engineers and automated tools
-LABEL description="NGINX web server installed"
-
-# 2. BASE IMAGE: Using 'alpine' is a pro-choice because it reduces the 
+# 1. BASE IMAGE: Using 'alpine' is a pro-choice because it reduces the 
 # image size from ~180MB to ~25MB and minimizes the security attack surface.
 FROM nginx:alpine
+
+# 2. METADATA: Provides context for other engineers and automated tools
+LABEL description="NGINX web server installed"
 
 # 3. OWNERSHIP: Useful for tracking who is responsible for the image build
 LABEL maintainer="VENKATESAN_SM"

@@ -21,6 +21,8 @@ pipeline{
                         git branch: 'dev', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
                     } else if (params.ENV == 'prod') {
                         git branch: 'prod', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
+                    }
+                }
             }
         }
         stage {'Build and Push Frontend Image'} {
