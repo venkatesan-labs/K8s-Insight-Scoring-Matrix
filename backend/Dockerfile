@@ -12,7 +12,7 @@ WORKDIR /app
 
 # 4. Copy package files using the --chown flag
 # This is a 'Pro' move: it sets permissions DURING the copy, saving a layer
-COPY --chown=node:node package.json ./
+COPY --chown=node:node ./backend/package.json ./
 
 # 5. Switch to non-root user BEFORE installing dependencies
 USER node
@@ -22,7 +22,7 @@ RUN npm install --production
 
 # 7. Copy the rest of the application code
 # Again, using --chown to avoid the extra RUN command at the end
-COPY --chown=node:node . .
+COPY --chown=node:node ./backend ./
 
 EXPOSE 3000
 

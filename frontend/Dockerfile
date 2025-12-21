@@ -14,7 +14,7 @@ LABEL version="1.0.0"
 # places them into the Nginx default root directory.
 # NOTE: If you have an 'index.html' inside your local './html', it will 
 # overwrite the default Nginx welcome page.
-COPY ./html /usr/share/nginx/html/
+COPY ./frontend/html /usr/share/nginx/html/
 
 # 5. NETWORKING:
 # This is documentation. It tells the container runtime (K8s/OpenShift) 
