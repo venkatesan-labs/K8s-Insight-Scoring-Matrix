@@ -64,7 +64,7 @@ pipeline{
         }
         stage ('Deploy to Kubernetes'){
             steps {
-                withCredentials([file(credentialsId: 'K8S_CONFIG', variable: 'KUBECONFIG_PATH')]) {
+                withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG_PATH')]) {
                 script {
                     def kubeconfig = ${KUBECONFIG_PATH}
                     sh """

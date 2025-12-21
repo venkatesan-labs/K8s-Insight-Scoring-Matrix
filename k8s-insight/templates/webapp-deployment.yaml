@@ -22,10 +22,4 @@ spec:
             - containerPort: 80
           volumeMounts:
             - name: {{ .Release.Name }}-volume
-              mountPath: /usr/share/nginx/html
-      volumes:
-        - name: {{ .Release.Name }}-volume
-          persistentVolumeClaim:
-            claimName: {{ .Release.Name }}-pvc
-            
-               
+              mountPath: /usr/share/nginx/html       
