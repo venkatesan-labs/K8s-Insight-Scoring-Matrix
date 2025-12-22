@@ -1,3 +1,8 @@
+global:  
+  secret:
+    name: mysql-secret
+  configMap:
+    name: mysql-configmap
 # This key must match your frontend main chart
 frontend:
   name: frontend-deployment
@@ -48,12 +53,6 @@ mysql-db:
   volume:
     name: sql-init
     mountPath: /docker-entrypoint-initdb.d
-
-global:  
-  secret:
-    name: mysql-secret
-  configMap:
-    name: mysql-configmap
     
 
   

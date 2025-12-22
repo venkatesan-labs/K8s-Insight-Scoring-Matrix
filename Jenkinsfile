@@ -63,6 +63,21 @@ pipeline{
             }
             }
         }
+        stage ('Deploy Ngrok Ingress Controller'){
+            steps {
+                withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG'),
+                string(credentialsID: 'NGROK_API_KEY', variable: 'NGROK_API_KEY'),
+                string(credentialsId: 'NGROK_AUTH_KEY', variable: 'NGROK_AUTH_KEY')]) {
+                script {
+                    sh """
+                        echo "Ngrok Operator installation in process."
+                        helm install ngrok-operator /ngrok-operator --set ngrok.authToken=${NGROK_API_KEY} --set ngrok.authtoken=${NGROK_API_KEY}
+                        echo "Ngrok Operator installation Completed."
+                    """
+                }
+                }
+            }
+        }
         stage ('Deploy to Kubernetes'){
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG')]) {
@@ -93,7 +108,7 @@ pipeline{
                         kubectl patch ingress ngrok-ingress -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}'
                         kubectl patch domain dianna-beholdable-larissa-ngrok-free-dev -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}';
                         
-                        helm uninstall k8s-insight-${params.ENV} ./k8s-insight 
+                        helm uninstall k8s-insight-${params.ENV}
                     """
                     }
                 }
