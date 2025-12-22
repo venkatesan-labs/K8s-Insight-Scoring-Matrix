@@ -19,13 +19,7 @@ pipeline{
             } 
             steps {
                 script {
-                    if (params.ENV == "test") {
-                        git branch: 'test', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
-                    } else if (params.ENV == "dev") {
-                        git branch: 'dev', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
-                    } else if (params.ENV == "prod") {
-                        git branch: 'prod', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
-                    }
+                git branch: ${params.ENV}, url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
                 }
             }
         }
@@ -118,7 +112,8 @@ pipeline{
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG')]) {
-                   sh """
+                script {
+                    sh """
                         # Add your kubectl deployment commands here
                         echo "Deleting helm k8s-insight-${params.ENV} in ${params.ENV} environment "
 
@@ -128,13 +123,14 @@ pipeline{
                         helm uninstall k8s-insight-${params.ENV}
                         
                         echo "Cleanup completed."
-                    """
-                    if (params.NGROK.trim() == "DELETE") {
-                        sh """
-                            echo "Deleting Ngrok Ingress Controller"
-                            helm uninstall ngrok-operator
-                            echo "Ngrok Ingress Controller Deleted."
-                        """
+                      """
+                        if (params.NGROK.trim() == "DELETE") {
+                            sh """
+                                echo "Deleting Ngrok Ingress Controller"
+                                helm uninstall ngrok-operator
+                                echo "Ngrok Ingress Controller Deleted."
+                            """
+                        }
                     }
                 }
             }
