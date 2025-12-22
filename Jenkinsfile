@@ -11,8 +11,7 @@ pipeline{
         GIT_REGISTRY = 'ghcr.io/kodecloud95'
         FRONTEND_IMAGE_NAME = "k8s-insight-frontend-${params.ENV}"
         BACKEND_IMAGE_NAME = "k8s-insight-backend-${params.ENV}"
-        
-    }
+        }
     stages {
         stage ('Checkout Code') {
             when {

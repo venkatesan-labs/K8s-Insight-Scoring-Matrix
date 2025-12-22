@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: ngrok
   rules:
-    - host: "dianna-beholdable-larissa.ngrok-free.dev"
+    - host: {{ .Values.frontend.ingress.host }}
       http:
         paths:
           - path: /api/score

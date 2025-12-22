@@ -1,2 +1,0 @@
-backend:
-  image: ghcr.io/kodecloud95/k8s-insight-backend-test:latest
