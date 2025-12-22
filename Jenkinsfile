@@ -69,8 +69,8 @@ pipeline{
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG'),
-                string(credentialsID: 'NGROK_API_KEY', variable: 'NGROK_API_KEY'),
-                string(credentialsId: 'NGROK_AUTH_KEY', variable: 'NGROK_AUTH_KEY')]) {
+                                string(credentialsId: 'NGROK_API_KEY', variable: 'NGROK_API_KEY'),
+                                string(credentialsId: 'NGROK_AUTH_KEY', variable: 'NGROK_AUTH_KEY')]) {
                 script {
                     sh """
                         echo "Ngrok Operator installation in process."
