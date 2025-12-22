@@ -27,7 +27,7 @@ pipeline{
         }
         stage ('Build and Push Frontend Image') {
             when {
-                expression { (params.FRONTEND_IMAGE_TAG.trim()) == 'latest' && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
+                expression { (params.FRONTEND_IMAGE_TAG.trim() == 'latest') && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
                 }             
             steps { 
                 withCredentials([usernamePassword(credentialsId: 'GIT_PACKAGE', 
@@ -46,7 +46,7 @@ pipeline{
         }
         stage ('Build and Push Backend Image') {
             when {
-                expression { (params.BACKEND_IMAGE_TAG.trim()) == 'latest' && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
+                expression { (params.BACKEND_IMAGE_TAG.trim() == 'latest') && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
                 }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'GIT_PACKAGE', 
@@ -65,7 +65,7 @@ pipeline{
         }
         stage ('Deploy Ngrok Ingress Controller'){
             when {
-                expression { params.ACTION == "DEPLOY" || params.ACTION == "UPDATE" }
+                expression { (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG'),
@@ -83,7 +83,7 @@ pipeline{
         }
         stage ('Deploy to Kubernetes'){
             when {
-                expression { params.ACTION == "DEPLOY" || params.ACTION == "UPDATE" }
+                expression { (params.ACTION == "DEPLOY") || (params.ACTION == "UPDATE") }
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG')]) {
@@ -110,9 +110,10 @@ pipeline{
         }
         stage ('Deployment Cleanup') {
             when {
-                expression { params.ACTION == "DELETE" }
+                expression { (params.ACTION == "DELETE") }
             }
             steps {
+                withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG')]) {
                    sh """
                         # Add your kubectl deployment commands here
                         echo "Deleting helm k8s-insight-${params.ENV} in ${params.ENV} environment "
@@ -125,6 +126,7 @@ pipeline{
 
                         echo "Cleanup completed."
                     """
+                }
             }
         }
     }
