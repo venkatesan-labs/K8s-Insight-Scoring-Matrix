@@ -27,7 +27,7 @@ pipeline{
         }
         stage ('Build and Push Frontend Image') {
             when {
-                expression { (params.FRONTEND_IMAGE_TAG.trim()) == 'latest' }
+                expression { (params.FRONTEND_IMAGE_TAG.trim()) == 'latest' && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
                 }             
             steps { 
                 withCredentials([usernamePassword(credentialsId: 'GIT_PACKAGE', 
@@ -46,7 +46,7 @@ pipeline{
         }
         stage ('Build and Push Backend Image') {
             when {
-                expression { (params.BACKEND_IMAGE_TAG.trim()) == 'latest' }
+                expression { (params.BACKEND_IMAGE_TAG.trim()) == 'latest' && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
                 }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'GIT_PACKAGE', 
