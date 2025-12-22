@@ -1,7 +1,7 @@
 # K8s-Insight-Scoring-Matrix-Venkatesan
 Web app hosted with work profile, kubernetes guide and quiz with 3 tire microservice architecture
 
-<img width="3033" height="1014" alt="image" src="https://github.com/user-attachments/assets/f2edbc29-3e6f-42cc-87a8-9f35d2547855" />
+<img width="2655" height="1610" alt="image" src="https://github.com/user-attachments/assets/3a3da6d5-d863-4f56-937b-dc285beb800a" />
 
 K8S INSIGHT SCORING MATRIX - INSTALLATION GUIDE
 ============================================================
