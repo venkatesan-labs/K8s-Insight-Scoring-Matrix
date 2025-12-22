@@ -1,7 +1,7 @@
 pipeline{
     agent any
     parameters {
-        choice(name: 'ENV', choices: ["test", "dev", "prod"], description: 'Select the environment')
+        choice(name: 'ENV', choices: ["test", "dev", "prod"], description: 'Select the environment to deploy, It will auto select credentials')
         choice(name: 'ACTION', choices: ["DEPLOY", "UPDATE", "DELETE"], description: 'Action to deploy, update or delete the application')
         choice(name: 'NGROK', choices: ["DEPLOY", "UPDATE", "DELETE"], description: 'Do you want to deploy or update or delete Ngrok Ingress Controller?')
         string(name: 'FRONTEND_IMAGE_TAG', defaultValue: 'latest', description: 'Frontend Docker image tag')
@@ -11,6 +11,7 @@ pipeline{
         GIT_REGISTRY = 'ghcr.io/kodecloud95'
         FRONTEND_IMAGE_NAME = "k8s-insight-frontend-${params.ENV}"
         BACKEND_IMAGE_NAME = "k8s-insight-backend-${params.ENV}"
+        
     }
     stages {
         stage ('Checkout Code') {
@@ -19,13 +20,7 @@ pipeline{
             } 
             steps {
                 script {
-                    if (params.ENV == "test") {
-                        git branch: 'test', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
-                    } else if (params.ENV == "dev") {
-                        git branch: 'dev', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
-                    } else if (params.ENV == "prod") {
-                        git branch: 'prod', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
-                    }
+                    git branch: 'test', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
                 }
             }
         }
