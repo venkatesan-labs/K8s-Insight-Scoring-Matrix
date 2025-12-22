@@ -15,7 +15,7 @@ pipeline{
         stage ('Checkout Code') {
             steps {
                 when {
-                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) }
+                expression { (params.ENV.trim() in ["test", "dev", "prod"]) }
                 }  
                 script {
                     if (params.ENV == "test") {
