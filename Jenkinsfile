@@ -74,7 +74,7 @@ pipeline{
                 script {
                     sh """
                         echo "Ngrok Operator installation in process."
-                        helm upgrade --install ngrok-operator ./ngrok-operator --set credentials.apiKey="${NGROK_API_KEY}" --set credentials.authtoken="${NGROK_API_KEY}"
+                        helm upgrade --install ngrok-operator ./ngrok-operator --set credentials.apiKey="${NGROK_API_KEY}" --set credentials.authtoken="${NGROK_AUTH_KEY}"
                         echo "Ngrok Operator installation Completed."
                     """
                 }
