@@ -2,7 +2,8 @@ pipeline{
     agent any
     parameters {
         choice(name: 'ENV', choices: ["test", "dev", "prod"], description: 'Select the environment')
-        choice(name: 'ACTION', choices: ["DEPLOY", "UPDATE", "DELETE"], description: 'Select the environment')
+        choice(name: 'ACTION', choices: ["DEPLOY", "UPDATE", "DELETE"], description: 'Action to deploy, update or delete the application')
+        choice(name: 'NGROK', choices: ["DEPLOY", "UPDATE", "DELETE"], description: 'Do you want to deploy or update or delete Ngrok Ingress Controller?')
         string(name: 'FRONTEND_IMAGE_TAG', defaultValue: 'latest', description: 'Frontend Docker image tag')
         string(name: 'BACKEND_IMAGE_TAG', defaultValue: 'latest', description: 'Backend Docker image tag')
     }
@@ -68,7 +69,7 @@ pipeline{
         }
         stage ('Deploy Ngrok Ingress Controller'){
             when {
-                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && ((params.ACTION == "DEPLOY" || params.ACTION == "UPDATE")) }
+                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && (params.ACTION.trim() in ["DEPLOY", "UPDATE"]) && (params.NGROK.trim() in ["DEPLOY", "UPDATE"])}
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG'),
@@ -77,7 +78,7 @@ pipeline{
                 script {
                     sh """
                         echo "Ngrok Operator installation in process."
-                        helm upgrade --install ngrok-operator-${params.ENV} ./ngrok-operator --set credentials.apiKey="${NGROK_API_KEY}" --set credentials.authtoken="${NGROK_AUTH_KEY}"
+                        helm upgrade --install ngrok-operator ./ngrok-operator --set credentials.apiKey="${NGROK_API_KEY}" --set credentials.authtoken="${NGROK_AUTH_KEY}"
                         echo "Ngrok Operator installation Completed."
                     """
                 }
@@ -113,7 +114,7 @@ pipeline{
         }
         stage ('Deployment Cleanup') {
             when {
-                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && (params.ACTION == "DELETE") }
+                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && (params.ACTION.trim() == "DELETE") }
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG')]) {
@@ -125,10 +126,16 @@ pipeline{
                         kubectl patch domain dianna-beholdable-larissa-ngrok-free-dev -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}';
                         
                         helm uninstall k8s-insight-${params.ENV}
-                        helm uninstall ngrok-operator
-
+                        
                         echo "Cleanup completed."
                     """
+                    if (params.NGROK.trim() == "DELETE") {
+                        sh """
+                            echo "Deleting Ngrok Ingress Controller"
+                            helm uninstall ngrok-operator
+                            echo "Ngrok Ingress Controller Deleted."
+                        """
+                    }
                 }
             }
         }
