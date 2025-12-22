@@ -93,7 +93,7 @@ pipeline{
                         kubectl patch ingress ngrok-ingress -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}'
                         kubectl patch domain dianna-beholdable-larissa-ngrok-free-dev -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}';
                         
-                        helm upgrade --uninstall k8s-insight-${params.ENV} ./k8s-insight 
+                        helm uninstall k8s-insight-${params.ENV} ./k8s-insight 
                     """
                     }
                 }
