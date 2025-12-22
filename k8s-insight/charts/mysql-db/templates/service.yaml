@@ -7,7 +7,6 @@ spec:
   type: ClusterIP
   selector:
     app: {{ .Values.name }}
-  clusterIP: 10.103.73.51
   ports:
     - name: mysql
       port: {{ .Values.service.port }}
