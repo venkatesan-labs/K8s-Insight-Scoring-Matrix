@@ -14,6 +14,9 @@ pipeline{
     stages {
         stage ('Checkout Code') {
             steps {
+                when {
+                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) }
+                }  
                 script {
                     if (params.ENV == "test") {
                         git branch: 'test', url: 'https://github.com/kodecloud95/K8s-Insight-Scoring-Matrix-Venkatesan.git'
@@ -27,7 +30,7 @@ pipeline{
         }
         stage ('Build and Push Frontend Image') {
             when {
-                expression { (params.FRONTEND_IMAGE_TAG.trim() == 'latest') && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
+                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && (params.FRONTEND_IMAGE_TAG.trim() == 'latest') && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
                 }             
             steps { 
                 withCredentials([usernamePassword(credentialsId: 'GIT_PACKAGE', 
@@ -46,7 +49,7 @@ pipeline{
         }
         stage ('Build and Push Backend Image') {
             when {
-                expression { (params.BACKEND_IMAGE_TAG.trim() == 'latest') && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
+                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && (params.BACKEND_IMAGE_TAG.trim() == 'latest') && (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
                 }
             steps {
                 withCredentials([usernamePassword(credentialsId: 'GIT_PACKAGE', 
@@ -65,7 +68,7 @@ pipeline{
         }
         stage ('Deploy Ngrok Ingress Controller'){
             when {
-                expression { (params.ACTION == "DEPLOY" || params.ACTION == "UPDATE") }
+                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && ((params.ACTION == "DEPLOY" || params.ACTION == "UPDATE")) }
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG'),
@@ -83,7 +86,7 @@ pipeline{
         }
         stage ('Deploy to Kubernetes'){
             when {
-                expression { (params.ACTION == "DEPLOY") || (params.ACTION == "UPDATE") }
+                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && ((params.ACTION == "DEPLOY") || (params.ACTION == "UPDATE")) }
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG')]) {
@@ -110,7 +113,7 @@ pipeline{
         }
         stage ('Deployment Cleanup') {
             when {
-                expression { (params.ACTION == "DELETE") }
+                expression { (params.ENV.trim() in ['test', 'dev', 'prod']) && (params.ACTION == "DELETE") }
             }
             steps {
                 withCredentials([file(credentialsId: 'K8S_CREDENTIAL', variable: 'KUBECONFIG')]) {
