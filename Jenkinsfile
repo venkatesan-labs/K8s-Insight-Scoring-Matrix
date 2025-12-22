@@ -2,7 +2,8 @@ pipeline{
     agent any
     parameters {
         choice(name: 'ENV', choices: ["test", "dev", "prod"], description: 'Select the environment')
-        string(name: 'FRONTEND_IMAGE_TAG', defaultValue: 'latest', description: 'Docker image tag')
+        choice(name: 'ACTION', choices: ["DEPLOY", "UPDATE", "DELETE"], description: 'Select the environment')
+        string(name: 'FRONTEND_IMAGE_TAG', defaultValue: 'latest', description: 'Frontend Docker image tag')
         string(name: 'BACKEND_IMAGE_TAG', defaultValue: 'latest', description: 'Backend Docker image tag')
     }
     environment {
@@ -73,15 +74,28 @@ pipeline{
                     def BACK_TAG = "${env.BUILD_NUMBER}"
                     if (params.BACKEND_IMAGE_TAG.trim() !=  'latest') {
                         BACK_TAG = params.BACKEND_IMAGE_TAG.trim()
-                    }                
+                    }
+                    if (params.ACTION == "DEOPLY" || params.ACTION == "UPDATE") {
                     sh """
                         # Add your kubectl deployment commands here
                         echo "Deploying to ${params.ENV} environment with Frontend Image Tag: ${FRONT_TAG} and Backend Image Tag: ${BACK_TAG}"
                         helm upgrade --install k8s-insight-${params.ENV} ./k8s-insight \\
-                            --set frontend.image=${GIT_REGISTRY}/${FRONTEND_IMAGE_NAME}:${FRONT_TAG} \\
+                            --set frontend.container.image=${GIT_REGISTRY}/${FRONTEND_IMAGE_NAME}:${FRONT_TAG} \\
                             --set backend-deployment.image=${GIT_REGISTRY}/${BACKEND_IMAGE_NAME}:${BACK_TAG} 
                         
                     """
+                    }
+                    else if (params.ACTION == "DELETE") {                
+                    sh """
+                        # Add your kubectl deployment commands here
+                        echo "Deleting Frontend Image Tag: ${FRONT_TAG} and Backend Image Tag: ${BACK_TAG} in ${params.ENV} environment "
+
+                        kubectl patch ingress ngrok-ingress -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}'
+                        kubectl patch domain dianna-beholdable-larissa-ngrok-free-dev -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}';
+                        
+                        helm upgrade --uninstall k8s-insight-${params.ENV} ./k8s-insight 
+                    """
+                    }
                 }
                 }
             }

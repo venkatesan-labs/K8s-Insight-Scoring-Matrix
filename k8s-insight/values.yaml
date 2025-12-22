@@ -1,4 +1,37 @@
+# This key must match your frontend main chart
 frontend:
-  image: ghcr.io/kodecloud95/k8s-insight-frontend-test:latest
+  name: frontend-deployment
+  # Number of pods to run
+  replicas: 2
+
+  ingress:
+    # The external URL provided by ngrok
+    host: "dianna-beholdable-larissa.ngrok-free.dev"
+    # Ensure finalizers are empty to prevent "stuck" namespaces
+    finalizers: []
+
+  service:
+    # Port accessible within the cluster
+    port: 80
+    # Port accessible from your RHEL/Worker Node IP
+    nodePort: 30090
+    # The port the container is actually listening on
+    targetPort: 80
+
+  container:
+    # Internal port for the application process
+    containerPort: 80
+    # Base image path (Jenkins will override the :tag part)
+    image: ghcr.io/kodecloud95/k8s-insight-frontend-test
+
 backend-deployment:
-  image: ghcr.io/kodecloud95/k8s-insight-backend-test:latest
+  name: backend-deployment
+  replicas: 2
+  container:
+    # Base image path (Jenkins will override the :tag part)
+    image: ghcr.io/kodecloud95/k8s-insight-backend-test
+    # Internal port for the application process
+    containerPort: 3000
+  service:
+    port: 3000
+    targetPort: 3000  

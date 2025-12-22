@@ -6,11 +6,11 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: frontend-deployment
+    app: {{ .Values.frontend.name }}
   ports:
     - name: http
-      targetPort: 80
-      port: 80
+      targetPort: {{ .Values.frontend.service.targetPort }}
+      port: {{ .Values.frontend.service.port }}
 
 ---
 
@@ -22,9 +22,9 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: frontend-deployment
+    app: {{ .Values.frontend.name }}
   ports:
     - name: http
-      targetPort: 80
-      port: 80
-      nodePort: 30090
+      targetPort: {{ .Values.frontend.service.targetPort }}
+      port: {{ .Values.frontend.service.port }}
+      nodePort: {{ .Values.frontend.service.nodePort }}

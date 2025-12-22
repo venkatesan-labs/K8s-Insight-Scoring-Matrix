@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend-deployment
+  name: {{ .Values.frontend.name }}
   namespace: {{ .Release.Name }}
   labels:
-    app: frontend-deployment
+    app: {{ .Values.frontend.name }}
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: frontend-deployment
+      app: {{ .Values.frontend.name }}
   template:
     metadata:
       labels:
-        app: frontend-deployment
+        app: {{ .Values.frontend.name }}
     spec:
       containers:
-        - name: frontend-deployment
-          image: {{ .Values.frontend.image }}
+        - name: {{ .Values.frontend.name }}
+          image: {{ .Values.frontend.container.image }}
           ports:
-            - containerPort: 80   
+            - containerPort: {{ .Values.frontend.container.containerPort }} 

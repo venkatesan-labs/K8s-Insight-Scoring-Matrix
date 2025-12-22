@@ -6,8 +6,8 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: backend-deployment 
+    app: {{ .Values.name }}
   ports:
     - name: backend
-      port: 3000
-      targetPort: 3000
+      port: {{ .Values.container.service.port }}
+      targetPort: {{ .Values.container.service.targetPort }}

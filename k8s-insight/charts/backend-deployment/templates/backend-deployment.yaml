@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backend-deployment
+  name: {{ .Values.name }}
   namespace: {{ .Release.Name }}
   labels:
-    app: backend-deployment
+    app: {{ .Values.name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: backend-deployment
+      app: {{ .Values.name }}
   template:
     metadata:
       labels:
-        app: backend-deployment
+        app: {{ .Values.name }}
     spec:
       containers:
-        - name: backend-deployment
-          image: {{ .Values.image }}
+        - name: {{ .Values.name }}
+          image: {{ .Values.container.image }}
           imagePullPolicy: Always
           ports:
-            - containerPort: 3000
+            - containerPort: {{ .Values.container.containerPort }}
           env:
             - name: MYSQL_DATABASE
               valueFrom:
