@@ -118,7 +118,7 @@ pipeline{
                         echo "Deleting helm k8s-insight-${params.ENV} in ${params.ENV} environment "
 
                         kubectl patch ingress ngrok-ingress -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}'
-                        kubectl patch domain dianna-beholdable-larissa-ngrok-free-dev -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}';
+                        kubectl patch domain dianna-beholdable-larissa-ngrok-free-dev -n k8s-insight-${params.ENV} --type merge -p '{"metadata":{"finalizers":null}}'
                         
                         helm uninstall k8s-insight-${params.ENV}
                         
