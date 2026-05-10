@@ -33,11 +33,11 @@ pipeline{
                                 passwordVariable: 'REGISTRY_CREDENTIALS_PSW')]) {            
                 script {
                     def frontendImage = "${GIT_REGISTRY}/${FRONTEND_IMAGE_NAME}:${env.BUILD_NUMBER}"
-                    sh """
+                    sh '''
                         docker build -f ./frontend/Dockerfile -t ${frontendImage} .
                         echo ${REGISTRY_CREDENTIALS_PSW} | docker login ghcr.io -u ${REGISTRY_CREDENTIALS_USR} --password-stdin
                         docker push ${frontendImage}
-                    """                    
+                    '''                   
                 }
                 }  
             }
@@ -54,7 +54,7 @@ pipeline{
                     def backendImage = "${GIT_REGISTRY}/${BACKEND_IMAGE_NAME}:${env.BUILD_NUMBER}"
                     sh """
                         docker build -f ./backend/Dockerfile -t ${backendImage} .
-                        echo ${REGISTRY_CREDENTIALS_PSW} | docker login ghcr.io -u ${REGISTRY_CREDENTIALS_USR} --password-stdin
+                        echo "${REGISTRY_CREDENTIALS_PSW}" | docker login ghcr.io -u "${REGISTRY_CREDENTIALS_USR}" --password-stdin
                         docker push ${backendImage}
                     """
                 }
